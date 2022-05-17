@@ -12,9 +12,9 @@
 ## Install on android (Termux)
     $ pkg install git -y
     $ pkg install php -y
-    $ git clone https://github.com/Zlaxtert/MD5-Decrypt
-    $ cd MD5-Decrypt
-    $ php md5.php
+    $ git clone https://github.com/ZLaxtert/amazon-validator
+    $ cd amazon-validator
+    $ php cli.php
 
 ## Screenshot
 <img src="img/amz.png">
