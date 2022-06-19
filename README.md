@@ -17,6 +17,6 @@
     $ php cli.php
 
 ## Screenshot
-<img src="img/amz.png">
+<img src="img/bg.png">
 
 
