@@ -18,8 +18,8 @@ $date = date("l, d-m-Y (H:m:s)");
 
 //========> REQUIRE
 
-require_once "function/gangbang.php";
-require_once "function/threesome.php";
+require_once "xnxx/gangbang.php";
+require_once "xnxx/threesome.php";
 
 //========> BANNER
 
