@@ -17,6 +17,6 @@
     $ php cli.php
 
 ## Screenshot
-<img src="img/bg.png">
+<img src="https://cloud.banditcoding.xyz/cloud/upload/alex/bg.png">
 
 
